@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speak&Smile · Генератор отчётов · GMF2 Zero</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: #f4f1f9; min-height: 100vh;
+  padding: 16px 14px 40px; color: #222;
+}
+.wrap { max-width: 600px; margin: 0 auto; }
+
+.header {
+  background: #6C3FC5; border-radius: 14px;
+  padding: 14px 18px; margin-bottom: 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-title { color: white; font-weight: 800; font-size: 19px; }
+.header-sub { color: #F5C842; font-size: 12px; margin-top: 2px; }
+.header-badge {
+  background: #F5C842; color: #6C3FC5;
+  font-weight: 700; font-size: 11px;
+  padding: 4px 12px; border-radius: 20px;
+}
+
+.tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+.tab {
+  flex: 1; padding: 11px;
+  border-radius: 10px; border: 2px solid #ddd;
+  background: white; color: #888;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; text-align: center;
+  -webkit-tap-highlight-color: transparent; min-width: 90px;
+}
+.tab.on { background: #6C3FC5; border-color: #6C3FC5; color: white; }
+.tab-content { display: none; }
+.tab-content.on { display: block; }
+
+.card {
+  background: white; border-radius: 12px;
+  padding: 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  margin-bottom: 14px;
+}
+.field { margin-bottom: 16px; }
+.lbl {
+  display: block; font-size: 13px; font-weight: 600;
+  color: #6C3FC5; margin-bottom: 7px;
+}
+.lbl-hint { font-weight: 400; color: #aaa; font-size: 11px; }
+input[type=text], input[type=number], textarea, select {
+  width: 100%; padding: 10px 13px;
+  border-radius: 8px; border: 1.5px solid #ddd;
+  font-size: 14px; font-family: inherit; outline: none;
+  -webkit-appearance: none; appearance: none; background: white;
+}
+textarea { resize: vertical; min-height: 56px; }
+
+.pills { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 8px; }
+.pill {
+  padding: 7px 14px; border-radius: 20px;
+  border: 2px solid #ddd; background: white;
+  color: #666; font-size: 13px; font-weight: 500;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.pill.on { background: #6C3FC5; border-color: #6C3FC5; color: white; font-weight: 700; }
+
+.srow { display: flex; gap: 6px; }
+.sbtn {
+  flex: 1; padding: 10px 2px; border-radius: 8px;
+  border: 2px solid #ddd; background: white; color: #666;
+  font-size: 16px; cursor: pointer; text-align: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.sbtn.on { background: #6C3FC5; border-color: #6C3FC5; color: white; font-weight: 700; }
+.shint { font-size: 11px; color: #999; font-style: italic; margin-top: 5px; min-height: 15px; }
+
+.orow { display: flex; flex-wrap: wrap; gap: 7px; }
+.obtn {
+  padding: 7px 13px; border-radius: 20px;
+  border: 2px solid #ddd; background: white;
+  color: #666; font-size: 12px; font-weight: 500;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.obtn.on { background: #6C3FC5; border-color: #6C3FC5; color: white; font-weight: 700; }
+
+.unit-info {
+  background: #FFF8E7; border-radius: 8px;
+  padding: 7px 11px; font-size: 12px; color: #6C3FC5;
+}
+.trow { display: flex; align-items: center; gap: 8px; }
+.slash { color: #bbb; font-size: 22px; }
+.fhint { font-size: 11px; color: #aaa; margin-top: 4px; }
+.pctprev { font-size: 13px; color: #6C3FC5; font-weight: 600; margin-top: 4px; min-height: 18px; }
+
+.genbtn {
+  width: 100%; padding: 14px; border-radius: 10px; border: none;
+  background: #6C3FC5; color: white;
+  font-weight: 700; font-size: 15px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent; margin-top: 2px;
+}
+.genbtn:disabled { background: #ccc; }
+
+.out-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.out-ttl { font-size: 14px; font-weight: 700; color: #6C3FC5; }
+.cpbtn {
+  padding: 6px 16px; border-radius: 20px;
+  border: 1.5px solid #6C3FC5; background: white; color: #6C3FC5;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.cpbtn.done { background: #6C3FC5; color: white; }
+.rempty {
+  min-height: 100px; display: flex; align-items: center; justify-content: center;
+  color: #ccc; text-align: center;
+  border: 2px dashed #d8ccee; border-radius: 10px;
+  font-size: 13px; padding: 20px;
+}
+.rbox {
+  background: #EDE7F6; border-radius: 10px;
+  padding: 16px; font-size: 14px; line-height: 1.8; display: none;
+}
+.rhint {
+  margin-top: 10px; padding: 10px 12px;
+  background: #FFF8E7; border-radius: 8px;
+  font-size: 12px; color: #777;
+  border-left: 3px solid #F5C842; display: none;
+}
+
+/* Group tab */
+.group-section-title {
+  font-size: 13px; font-weight: 700; color: #6C3FC5;
+  margin-bottom: 10px; padding-bottom: 6px;
+  border-bottom: 2px solid #F5C842;
+}
+.pupil-row {
+  background: white; border-radius: 10px;
+  border: 1.5px solid #e8e0f0; padding: 14px; margin-bottom: 10px;
+}
+.pupil-num {
+  display: inline-block; background: #6C3FC5; color: white;
+  font-size: 11px; font-weight: 700;
+  padding: 2px 8px; border-radius: 10px; margin-bottom: 10px;
+}
+.pupil-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pupil-field label { display: block; font-size: 11px; font-weight: 600; color: #6C3FC5; margin-bottom: 4px; }
+.mini-scores { display: flex; gap: 4px; }
+.msb {
+  flex: 1; padding: 7px 2px; border-radius: 6px;
+  border: 1.5px solid #ddd; background: white; color: #666;
+  font-size: 14px; cursor: pointer; text-align: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.msb.on { background: #6C3FC5; border-color: #6C3FC5; color: white; font-weight: 700; }
+.mini-opts { display: flex; flex-wrap: wrap; gap: 4px; }
+.mob {
+  padding: 4px 8px; border-radius: 12px;
+  border: 1.5px solid #ddd; background: white;
+  color: #666; font-size: 11px;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.mob.on { background: #6C3FC5; border-color: #6C3FC5; color: white; font-weight: 700; }
+.pupil-field input[type=number], .pupil-field input[type=text] { padding: 7px 10px; font-size: 13px; }
+.pupil-field textarea { min-height: 42px; padding: 7px 10px; font-size: 12px; }
+.pupil-field.full { grid-column: 1 / -1; }
+
+.greport-item { background: #EDE7F6; border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+.greport-name { font-size: 12px; font-weight: 700; color: #6C3FC5; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.greport-text { font-size: 13px; line-height: 1.75; }
+
+/* Pupils tab */
+.pupil-card { border: 1.5px solid #e8e0f0; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+.pupil-card-name { font-size: 14px; font-weight: 700; color: #6C3FC5; margin-bottom: 8px; }
+.unit-badges { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+.unit-badge {
+  padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;
+  background: #EDE7F6; color: #6C3FC5; cursor: pointer; border: 1.5px solid #D8CCEA;
+}
+.unit-badge.has-data { background: #6C3FC5; color: white; border-color: #6C3FC5; }
+.year-btn {
+  padding: 7px 14px; border-radius: 8px; border: none;
+  background: #F5C842; color: #6C3FC5;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+}
+.del-btn {
+  padding: 5px 10px; border-radius: 8px;
+  border: 1.5px solid #ffcccc; background: white; color: #cc4444;
+  font-size: 11px; cursor: pointer;
+}
+
+/* Year report */
+.year-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 10px 0; }
+.year-table th { background: #6C3FC5; color: white; padding: 6px 4px; text-align: center; font-weight: 600; }
+.year-table td { padding: 6px 4px; text-align: center; border-bottom: 1px solid #e8e0f0; }
+.year-table tr:nth-child(even) td { background: #f9f6ff; }
+.score-cell { font-weight: 700; }
+.score-5 { color: #2e7d32; } .score-4 { color: #558b2f; }
+.score-3 { color: #f57c00; } .score-2 { color: #c62828; } .score-1 { color: #b71c1c; }
+.year-summary { background: #EDE7F6; border-radius: 10px; padding: 14px; margin-top: 12px; font-size: 14px; line-height: 1.8; }
+
+/* Genki block highlight */
+.genki-badge {
+  display: inline-block; background: #F5C842; color: #6C3FC5;
+  font-size: 10px; font-weight: 700; padding: 2px 8px;
+  border-radius: 10px; margin-left: 6px; vertical-align: middle;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="header">
+  <div>
+    <div class="header-title">Speak&amp;Smile</div>
+    <div class="header-sub">Генератор отчётов · Give Me Five! 2 <span style="opacity:.7">нулевой уровень</span></div>
+  </div>
+  <div class="header-badge">для педагога</div>
+</div>
+
+<!-- Teacher login -->
+<div class="card" id="teacherCard">
+  <div class="lbl" style="margin-bottom:8px">👤 Ваше имя (педагог)</div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <input type="text" id="teacherLogin" placeholder="Например: Ксения" style="flex:1">
+    <button onclick="setTeacher()" style="padding:10px 16px;border-radius:8px;border:none;background:#6C3FC5;color:white;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap">Войти</button>
+  </div>
+  <div style="font-size:11px;color:#aaa;margin-top:6px">Имя сохраняется на этом устройстве</div>
+</div>
+<div id="teacherBadge" style="display:none;margin-bottom:14px;padding:10px 16px;background:#EDE7F6;border-radius:10px;align-items:center;justify-content:space-between">
+  <span style="font-size:13px;color:#6C3FC5;font-weight:600" id="teacherBadgeName"></span>
+  <button onclick="changeTeacher()" style="font-size:11px;color:#aaa;background:none;border:none;cursor:pointer">Сменить</button>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="switchTab('one',this)">👤 Один ученик</button>
+  <button class="tab" onclick="switchTab('group',this)">👥 Вся группа</button>
+  <button class="tab" onclick="switchTab('pupils',this);loadPupils()">📋 Мои ученики</button>
+</div>
+
+<!-- ═══ TAB: ONE PUPIL ═══ -->
+<div class="tab-content on" id="tab-one">
+<div class="card">
+
+  <div class="field">
+    <span class="lbl">Блок</span>
+    <div class="pills" id="unitPills">
+      <button class="pill on"  onclick="selUnit(0,this,'one')">Genki</button>
+      <button class="pill"     onclick="selUnit(1,this,'one')">Unit 1</button>
+      <button class="pill"     onclick="selUnit(2,this,'one')">Unit 2</button>
+      <button class="pill"     onclick="selUnit(3,this,'one')">Unit 3</button>
+      <button class="pill"     onclick="selUnit(4,this,'one')">Unit 4</button>
+      <button class="pill"     onclick="selUnit(5,this,'one')">Unit 5</button>
+      <button class="pill"     onclick="selUnit(6,this,'one')">Unit 6</button>
+      <button class="pill"     onclick="selUnit(7,this,'one')">Unit 7</button>
+      <button class="pill"     onclick="selUnit(8,this,'one')">Unit 8</button>
+      <button class="pill"     onclick="selUnit(9,this,'one')">Unit 9</button>
+    </div>
+    <div class="unit-info" id="uinfo-one"></div>
+  </div>
+
+  <div class="field">
+    <label class="lbl" for="cname">Имя ребёнка</label>
+    <input type="text" id="cname" placeholder="Например: Иван Карпов" oninput="chkOne()">
+  </div>
+
+  <!-- Genki skills (показываем только для Genki) -->
+  <div id="genkiFields">
+    <div class="field">
+      <span class="lbl">Песни и движение <span class="genki-badge">Genki</span></span>
+      <div class="srow" id="vrow">
+        <button class="sbtn" onclick="selS('v',1,this)">1</button>
+        <button class="sbtn" onclick="selS('v',2,this)">2</button>
+        <button class="sbtn" onclick="selS('v',3,this)">3</button>
+        <button class="sbtn" onclick="selS('v',4,this)">4</button>
+        <button class="sbtn" onclick="selS('v',5,this)">5</button>
+      </div>
+      <div class="shint" id="vhint"></div>
+    </div>
+    <div class="field">
+      <span class="lbl">Разговорные фразы <span class="genki-badge">Genki</span></span>
+      <div class="srow" id="grow">
+        <button class="sbtn" onclick="selS('g',1,this)">1</button>
+        <button class="sbtn" onclick="selS('g',2,this)">2</button>
+        <button class="sbtn" onclick="selS('g',3,this)">3</button>
+        <button class="sbtn" onclick="selS('g',4,this)">4</button>
+        <button class="sbtn" onclick="selS('g',5,this)">5</button>
+      </div>
+      <div class="shint" id="ghint"></div>
+    </div>
+  </div>
+
+  <!-- GMF fields (для всех кроме Genki) -->
+  <div id="gmfFields" style="display:none">
+    <div class="field">
+      <span class="lbl">Лексика</span>
+      <div class="srow" id="vrow2">
+        <button class="sbtn" onclick="selS('v',1,this)">1</button>
+        <button class="sbtn" onclick="selS('v',2,this)">2</button>
+        <button class="sbtn" onclick="selS('v',3,this)">3</button>
+        <button class="sbtn" onclick="selS('v',4,this)">4</button>
+        <button class="sbtn" onclick="selS('v',5,this)">5</button>
+      </div>
+      <div class="shint" id="vhint2"></div>
+    </div>
+    <div class="field">
+      <span class="lbl">Грамматика</span>
+      <div class="srow" id="grow2">
+        <button class="sbtn" onclick="selS('g',1,this)">1</button>
+        <button class="sbtn" onclick="selS('g',2,this)">2</button>
+        <button class="sbtn" onclick="selS('g',3,this)">3</button>
+        <button class="sbtn" onclick="selS('g',4,this)">4</button>
+        <button class="sbtn" onclick="selS('g',5,this)">5</button>
+      </div>
+      <div class="shint" id="ghint2"></div>
+    </div>
+  </div>
+
+  <div class="field">
+    <span class="lbl">Активность / работа в паре</span>
+    <div class="srow" id="arow">
+      <button class="sbtn" onclick="selS('a',1,this)">1</button>
+      <button class="sbtn" onclick="selS('a',2,this)">2</button>
+      <button class="sbtn" onclick="selS('a',3,this)">3</button>
+      <button class="sbtn" onclick="selS('a',4,this)">4</button>
+      <button class="sbtn" onclick="selS('a',5,this)">5</button>
+    </div>
+    <div class="shint" id="ahint"></div>
+  </div>
+
+  <div class="field">
+    <span class="lbl">Посещаемость</span>
+    <div class="trow">
+      <input type="number" id="att" placeholder="" min="0" style="width:72px">
+      <span style="color:#666;font-size:14px" id="attMax">/ — уроков</span>
+    </div>
+  </div>
+  <div class="field">
+    <span class="lbl">Пропуски отработаны онлайн</span>
+    <div class="orow" id="orow">
+      <button class="obtn" onclick="selO('none',this)">Пропусков не было</button>
+      <button class="obtn" onclick="selO('yes',this)">Да, все</button>
+      <button class="obtn" onclick="selO('partial',this)">Частично</button>
+      <button class="obtn" onclick="selO('no',this)">Нет</button>
+    </div>
+  </div>
+  <div class="field">
+    <span class="lbl">ДЗ выполнено <span class="lbl-hint">(%)</span></span>
+    <input type="number" id="hw" placeholder="85" min="0" max="100" style="width:90px">
+  </div>
+  <div class="field">
+    <span class="lbl">Тренировка слов в приложении</span>
+    <div class="orow" id="approw">
+      <button class="obtn" onclick="selApp('always',this)">Регулярно ✓</button>
+      <button class="obtn" onclick="selApp('sometimes',this)">Иногда</button>
+      <button class="obtn" onclick="selApp('rarely',this)">Редко</button>
+      <button class="obtn" onclick="selApp('never',this)">Не тренирует</button>
+    </div>
+  </div>
+
+  <!-- Тест — скрываем для Genki -->
+  <div id="testField" class="field" style="display:none">
+    <span class="lbl">Результат теста</span>
+    <div class="trow">
+      <input type="number" id="ts" placeholder="54" min="0" oninput="updPct()">
+      <span class="slash">/</span>
+      <input type="number" id="tt" placeholder="60" min="0" oninput="updPct()">
+    </div>
+    <div class="fhint">набрано / максимум</div>
+    <div class="pctprev" id="pctprev"></div>
+  </div>
+
+  <div class="field">
+    <label class="lbl" for="note">Заметка <span class="lbl-hint">(необязательно)</span></label>
+    <textarea id="note" placeholder="Например: хорошо включается в Genki-игры, стесняется говорить вслух"></textarea>
+  </div>
+
+  <button class="genbtn" id="gbtn" disabled onclick="genOne()">Сгенерировать отчёт</button>
+</div>
+
+<div class="card">
+  <div class="out-hdr">
+    <div class="out-ttl">Текст отчёта</div>
+    <button class="cpbtn" id="cpbtn" style="display:none" onclick="cpOne()">Копировать</button>
+  </div>
+  <div class="rempty" id="rempty">Заполните форму выше<br>и нажмите «Сгенерировать»</div>
+  <div class="rbox" id="rbox"></div>
+  <div class="rhint" id="rhint">Скопируйте текст и вставьте в Telegram или приложение.</div>
+  <div id="saveOneArea" style="display:none;margin-top:10px">
+    <button onclick="saveOne()" style="width:100%;padding:11px;border-radius:10px;border:2px solid #6C3FC5;background:white;color:#6C3FC5;font-weight:700;font-size:14px;cursor:pointer">
+      💾 Сохранить данные ученика
+    </button>
+    <div id="saveOneMsg" style="font-size:12px;color:#aaa;text-align:center;margin-top:6px;min-height:16px"></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ TAB: GROUP ═══ -->
+<div class="tab-content" id="tab-group">
+<div class="card">
+  <div class="group-section-title">Общие данные группы</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+    <div class="field">
+      <span class="lbl">Блок</span>
+      <div class="pills" id="gUnitPills">
+        <button class="pill on" onclick="selUnit(0,this,'group')">Genki</button>
+        <button class="pill"   onclick="selUnit(1,this,'group')">Unit 1</button>
+        <button class="pill"   onclick="selUnit(2,this,'group')">Unit 2</button>
+        <button class="pill"   onclick="selUnit(3,this,'group')">Unit 3</button>
+        <button class="pill"   onclick="selUnit(4,this,'group')">Unit 4</button>
+        <button class="pill"   onclick="selUnit(5,this,'group')">Unit 5</button>
+        <button class="pill"   onclick="selUnit(6,this,'group')">Unit 6</button>
+        <button class="pill"   onclick="selUnit(7,this,'group')">Unit 7</button>
+        <button class="pill"   onclick="selUnit(8,this,'group')">Unit 8</button>
+        <button class="pill"   onclick="selUnit(9,this,'group')">Unit 9</button>
+      </div>
+      <div class="unit-info" id="uinfo-group" style="margin-top:6px"></div>
+    </div>
+    <div>
+      <div class="field">
+        <label class="lbl" for="gTeacher">Педагог</label>
+        <input type="text" id="gTeacher" placeholder="Имя педагога">
+      </div>
+      <div class="field" id="gTestTotalWrap" style="display:none">
+        <label class="lbl" for="gTestTotal">Максимум теста</label>
+        <input type="number" id="gTestTotal" placeholder="60" min="0" style="width:80px">
+      </div>
+    </div>
+  </div>
+</div>
+<div id="pupilRows"></div>
+<div class="card" style="text-align:center">
+  <button class="genbtn" onclick="genGroup()" style="max-width:400px;margin:0 auto 10px">Сгенерировать все отчёты</button>
+  <button onclick="saveGroup()" id="saveBtnGroup" style="display:none;width:100%;max-width:400px;margin:0 auto;padding:11px;border-radius:10px;border:2px solid #6C3FC5;background:white;color:#6C3FC5;font-weight:700;font-size:14px;cursor:pointer">💾 Сохранить данные группы</button>
+  <div id="saveGroupMsg" style="font-size:12px;color:#aaa;text-align:center;margin-top:6px;min-height:16px"></div>
+</div>
+<div id="groupOutput"></div>
+</div>
+
+<!-- ═══ TAB: MY PUPILS ═══ -->
+<div class="tab-content" id="tab-pupils">
+<div class="card">
+  <div class="group-section-title">Мои ученики</div>
+  <div style="font-size:12px;color:#aaa;margin-bottom:12px">Все сохранённые данные на этом устройстве</div>
+  <div id="pupilsList"></div>
+</div>
+<div class="card" id="yearCard" style="display:none">
+  <div class="group-section-title" id="yearTitle"></div>
+  <div id="yearContent"></div>
+</div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+// ── Данные блоков ──────────────────────────────────────────
+var BLOCKS = [
+  { key:'genki',    label:'Genki English',                    period:'Сентябрь–Октябрь', att:12, isGenki:true,  hasTest:false,
+    v:'песни и движение',        g:'разговорные фразы' },
+  { key:'u1',       label:'Unit 1 — Move your body!',         period:'Октябрь–Ноябрь',   att:9,  isGenki:false, hasTest:true,
+    v:'виды спорта',             g:'I play/go… / Do you…? / Can you kick?' },
+  { key:'u2',       label:'Unit 2 — Let\'s go shopping!',     period:'Ноябрь',            att:6,  isGenki:false, hasTest:true,
+    v:'еда и фрукты',            g:'Can I have…? / a/an/some / How much?' },
+  { key:'u3',       label:'Unit 3 — At the zoo',              period:'Ноябрь–Декабрь',   att:6,  isGenki:false, hasTest:true,
+    v:'дикие животные',          g:'has/have got / Has it got…?' },
+  { key:'u4',       label:'Unit 4 — The nature trail',        period:'Январь',            att:6,  isGenki:false, hasTest:true,
+    v:'природа, предлоги движения', g:'Present Continuous / I\'m (climbing)' },
+  { key:'u5',       label:'Unit 5 — The frozen lake',         period:'Февраль',           att:6,  isGenki:false, hasTest:true,
+    v:'зимние активности',        g:'We\'re… / Are you…? / прилагательные' },
+  { key:'u6',       label:'Unit 6 — All year round',          period:'Февраль–Март',      att:6,  isGenki:false, hasTest:true,
+    v:'сезонные активности',      g:'What do you do in…? / порядковые числа' },
+  { key:'u7',       label:'Unit 7 — My house',                period:'Март',              att:6,  isGenki:false, hasTest:true,
+    v:'комнаты дома',             g:'There is/are… / Whose is it? mine/yours' },
+  { key:'u8',       label:'Unit 8 — All around the town',     period:'Апрель',            att:6,  isGenki:false, hasTest:true,
+    v:'места в городе, directions', g:'Is there a…? / Are there any…?' },
+  { key:'u9',       label:'Unit 9 — Holiday fun',             period:'Апрель–Май',        att:9,  isGenki:false, hasTest:true,
+    v:'места отдыха',             g:'Where were you? / I was… / was/were' }
+];
+// att:9 = Unit 9(6) + Final(1) + Speaking(1) + Резерв(1). Итого: 12+9+6*8+9 = 72 ✓
+
+var SL={1:'не усвоено',2:'слабо, нужна дополнительная работа',3:'справляется с поддержкой',4:'уверенно',5:'отлично, без подсказок'};
+var AL={1:'почти не включается',2:'активность ниже среднего',3:'включается, иногда нужно побуждение',4:'активен(а), хорошо работает в паре',5:'очень активен(а), инициативен(а)'};
+var OL={none:'пропусков не было',yes:'все пропуски отработаны онлайн',partial:'пропуски отработаны частично',no:'пропущенные уроки не отработаны'};
+var APL={always:'регулярно ✓',sometimes:'иногда',rarely:'редко — рекомендуем заниматься чаще',never:'не выполняется — рекомендуем включить в домашнюю рутину'};
+
+var S = {bi:0, v:0, g:0, a:0, o:'', app:''};
+var GS = {bi:0};
+var currentTeacher = localStorage.getItem('ss_teacher_gmf2z') || '';
+
+// ── Инициализация ──────────────────────────────────────────
+window.onload = function(){
+  updateUnitInfo(0,'one');
+  updateUnitInfo(0,'group');
+  buildPupilRows();
+  if(currentTeacher){
+    document.getElementById('teacherCard').style.display='none';
+    document.getElementById('teacherBadge').style.display='flex';
+    document.getElementById('teacherBadgeName').textContent='👤 '+currentTeacher;
+  }
+};
+
+function setTeacher(){
+  var v=document.getElementById('teacherLogin').value.trim();
+  if(!v) return;
+  currentTeacher=v;
+  localStorage.setItem('ss_teacher_gmf2z',v);
+  document.getElementById('teacherCard').style.display='none';
+  document.getElementById('teacherBadge').style.display='flex';
+  document.getElementById('teacherBadgeName').textContent='👤 '+v;
+}
+function changeTeacher(){
+  document.getElementById('teacherCard').style.display='block';
+  document.getElementById('teacherBadge').style.display='none';
+  document.getElementById('teacherLogin').value='';
+  currentTeacher='';
+  localStorage.removeItem('ss_teacher_gmf2z');
+}
+
+function switchTab(name,btn){
+  document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('on');});
+  document.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('on');});
+  btn.classList.add('on');
+  document.getElementById('tab-'+name).classList.add('on');
+}
+
+function updateUnitInfo(i, mode){
+  var b=BLOCKS[i];
+  var el=document.getElementById('uinfo-'+(mode==='group'?'group':'one'));
+  el.innerHTML='<strong>'+b.label+'</strong> · '+b.period+' · '+b.att+' уроков';
+  if(mode==='one'){
+    document.getElementById('attMax').textContent='/ '+b.att+' уроков';
+    if(b.isGenki){
+      document.getElementById('genkiFields').style.display='';
+      document.getElementById('gmfFields').style.display='none';
+    } else {
+      document.getElementById('genkiFields').style.display='none';
+      document.getElementById('gmfFields').style.display='';
+    }
+    document.getElementById('testField').style.display=b.hasTest?'':'none';
+  }
+  if(mode==='group'){
+    document.getElementById('gTestTotalWrap').style.display=b.hasTest?'':'none';
+  }
+}
+
+function selUnit(i,btn,mode){
+  var pillsId=mode==='group'?'gUnitPills':'unitPills';
+  document.querySelectorAll('#'+pillsId+' .pill').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  if(mode==='group'){ GS.bi=i; }
+  else { S.bi=i; S.v=0; S.g=0; S.a=0; resetScoreRow('vrow'); resetScoreRow('grow'); resetScoreRow('arow'); resetScoreRow('vrow2'); resetScoreRow('grow2'); }
+  updateUnitInfo(i,mode);
+  if(mode==='one') chkOne();
+}
+
+function resetScoreRow(id){
+  var el=document.getElementById(id);
+  if(el) el.querySelectorAll('.sbtn').forEach(function(b){b.classList.remove('on');});
+}
+
+function selS(k,val,btn){
+  S[k]=val;
+  var b=BLOCKS[S.bi];
+  var rowId, hintId;
+  if(b.isGenki){
+    rowId  = k==='v'?'vrow' : k==='g'?'grow' : 'arow';
+    hintId = k==='v'?'vhint': k==='g'?'ghint': 'ahint';
+  } else {
+    rowId  = k==='v'?'vrow2': k==='g'?'grow2': 'arow';
+    hintId = k==='v'?'vhint2':k==='g'?'ghint2':'ahint';
+  }
+  document.querySelectorAll('#'+rowId+' .sbtn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  var hint=document.getElementById(hintId);
+  if(hint) hint.textContent=(k==='a'?AL:SL)[val];
+  chkOne();
+}
+function selO(val,btn){ S.o=val; document.querySelectorAll('#orow .obtn').forEach(function(b){b.classList.remove('on');}); btn.classList.add('on'); }
+function selApp(val,btn){ S.app=val; document.querySelectorAll('#approw .obtn').forEach(function(b){b.classList.remove('on');}); btn.classList.add('on'); }
+function updPct(){ var s=parseFloat(document.getElementById('ts').value),t=parseFloat(document.getElementById('tt').value); document.getElementById('pctprev').textContent=(s>0&&t>0)?'→ '+Math.round(s/t*100)+'%':''; }
+function chkOne(){ var ok=document.getElementById('cname').value.trim()&&S.v&&S.a; document.getElementById('gbtn').disabled=!ok; }
+
+function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+function makeKey(teacher,name,bi){ return 'ss2z_'+teacher+'_'+name+'_'+bi; }
+
+// ── Тексты отчётов ────────────────────────────────────────
+var REPORTS = {
+  genki: {
+    main:[
+      '{name} делал(а) первые шаги в английском — адаптация у всех проходит по-разному. Пока язык ещё непривычен, нужно время. Это нормальный старт.',
+      '{name} постепенно входит в ритм. Откликается на команды класса — Stand up! Sit down! Clap! — участвует в играх. Первые фразы появляются: может представиться, назвать возраст, цвет.',
+      'За 12 уроков {name} освоил(а) основу: представляется («My name is…, I\'m … years old»), выражает состояние («I\'m happy / hungry»), говорит о предпочтениях («I like dogs, I don\'t like snakes»). Знает цвета, числа 1–12, животных, овощи, действия.',
+      'Отличный старт! {name} уже говорит по-английски. Может представиться и познакомиться, рассказать о себе — «I\'m happy», «I can fly!», назвать что любит — «I like vegetables». Считает до 12, знает цвета, вежливо просит — «May I borrow your pencil?»',
+      'За 12 вводных уроков {name} сделал(а) именно то, ради чего создан этот блок: заговорил(а). Представляется, выражает эмоции, говорит о предпочтениях, задаёт вопросы. В играх инициативен(а), помогает одноклассникам — это признак настоящей уверенности.'
+    ],
+    reading:[
+      'Фонетика (JP Book 1): знакомство со звуками английского. Пока буквы и звуки путаются — нужно время.',
+      'Фонетика (JP Book 1): первые группы звуков — s, a, t, i, p, n. {name} пробует читать: sat, pin, nap.',
+      'Фонетика (JP Book 1): прошли 20 из 26 звуков. {name} читает CVC-слова: sat, pin, hen, dog, fun.',
+      'Фонетика (JP Book 1): все 26 звуков пройдены. {name} читает первые слова уверенно. Фундамент заложен.',
+      'Фонетика (JP Book 1): все 26 звуков усвоены отлично. {name} читает слова самостоятельно и делает первые попытки читать предложения.'
+    ]
+  },
+  u1: {
+    main:[
+      '{name} пока осваивается с учебником. Спорт и движение — тема интересная, но I play/go и действия throw/kick требуют дополнительной практики.',
+      'Unit 1 даётся постепенно. {name} знает основные виды спорта и понимает «Do you play football?», но самостоятельно строить ответ пока сложно. С опорой справляется.',
+      '{name} освоил(а) виды спорта: football, basketball, tennis, cycling, volleyball. Говорит: «I play tennis. I go cycling.» Действия — throw, catch, kick — с опорой. В Starter повторил(а) базовую лексику первого уровня.',
+      'Хороший старт! {name} уверенно говорит о спорте: «Do you play basketball? — Yes, I do!» Знает действия и использует их: «She catches the ball.» Starter прошёл легко — база из Genki помогла.',
+      'Отличный юнит! {name} говорит о спорте свободно: «I play volleyball and go cycling. Can you kick? — Yes, I can!» Все действия в активном словаре. Диалоги — без подсказок.'
+    ],
+    reading:[
+      'Фонетика (JP Book 2): ch, sh, th, ng — знакомство. Пока в начале пути.',
+      'Фонетика: ch (chip, much), sh (ship, fish) — с опорой. th и ng — знакомство.',
+      'Фонетика: ch, sh, th, ng — знакомы. {name} читает с небольшой поддержкой: chip, shop, ring.',
+      'Фонетика: ch, sh, th, ng — усвоены. {name} читает уверенно: chip, shop, fish, this, ring, long.',
+      'Фонетика: ch, sh, th (оба варианта), ng — отлично. {name} читает бегло, различает звуки без ошибок.'
+    ]
+  },
+  u2: {
+    main:[
+      '{name} пока осваивает тему еды и покупок. Can I have…? и a/an/some требуют дополнительной практики.',
+      'Основные продукты знает: apple, bread, cheese. «Can I have an apple, please?» с опорой получается. Числа 10–50 пока с трудом.',
+      '{name} знает продукты и фрукты, участвует в диалоге: «Can I have some potatoes, please? — Of course! Here you are.» A/an/some — с подсказкой.',
+      '{name} уверенно ведёт диалог в магазине: «Can I have a yoghurt and some grapes, please?» Числа 10–50 и вопрос «How much?» — без затруднений.',
+      '{name} говорит о еде и покупках свободно. A/an/some — естественно. «How much is this lemon? — It\'s thirty pence.» Рецепт написал(а) с удовольствием.'
+    ],
+    reading:[
+      'Фонетика (JP Book 2): Magic e (a-e, i-e) — знакомство.',
+      'Фонетика: Magic e (a-e: cake, name) — с опорой. Путает с короткой a.',
+      'Фонетика: Magic e (a-e, i-e: kite, bike) — с поддержкой.',
+      'Фонетика: Magic e (a-e, e-e, i-e) — уверенно: cake, Pete, kite, smile.',
+      'Фонетика: Magic e всех типов — отлично. {name} читает длинные гласные свободно, понимает правило.'
+    ]
+  },
+  u3: {
+    main:[
+      'Дикие животные и have got — тема новая. «Has it got…?» пока воспринимается с трудом.',
+      '{name} знает основных животных: elephant, giraffe, lion, tiger. «It\'s got a long neck» с опорой. Части тела животных — знакомство.',
+      '{name} знает диких животных и описывает: «It\'s got spots and a long tail.» «Has it got wings? — No, it hasn\'t.» Игра «угадай животное» — с опорой педагога.',
+      '{name} уверенно описывает животных: «It\'s got fur and sharp claws. Has it got stripes? — Yes, it has!» В игре «угадай животное» — один из лучших.',
+      '{name} описывает животных легко и точно: «It\'s got a beak, wings and feathers — it\'s a parrot!» Have got — свободно. Факт-файлы написал(а) с деталями.'
+    ],
+    reading:[
+      'Фонетика (JP Book 2): /ee/ (tree, leaf) и /ie/ (pie, kite) — знакомство.',
+      'Фонетика: /ee/ (ee, ea) — с опорой. /ie/ — знакомство.',
+      'Фонетика: /ee/ — с поддержкой. /ie/ (ie, i-e, y, igh) — осваивает.',
+      'Фонетика: /ee/ — уверенно. /ie/ (pie, kite, sky, night) — хорошо.',
+      'Фонетика: /ee/ и /ie/ во всех написаниях — отлично. {name} читает без подсказок.'
+    ]
+  },
+  u4: {
+    main:[
+      'Природа и Present Continuous — объёмная тема. «What are you doing?» пока воспринимается с трудом.',
+      '{name} знает объекты природы: hill, pond, waterfall. «I\'m climbing» с опорой. Предлоги движения — знакомство.',
+      '{name} использует Present Continuous: «What are you doing? — I\'m running up the hill!» Предлоги up, down, across, through — с подсказкой.',
+      '{name} уверенно говорит о действиях в природе: «She\'s climbing across the bridge. He\'s going through the forest.» Present Continuous — без ошибок.',
+      'Present Continuous — как родной. {name} описывает любую сцену: «They\'re jumping over the stream and running along the path!» Приключенческую историю написал(а) с живыми деталями.'
+    ],
+    reading:[
+      'Фонетика (JP Book 2): /oa/ (coat, grow) и /oo/ — знакомство.',
+      'Фонетика: /oa/ (oa, ow, o-e) — с опорой. /oo/ — знакомство.',
+      'Фонетика: /oa/ — с поддержкой. /oo/ длинный (moon) и короткий (book) — осваивает.',
+      'Фонетика: /oa/ — уверенно. /oo/ оба варианта — хорошо различает.',
+      'Фонетика: /oa/ и /oo/ (оба варианта) — отлично. {name} различает moon и book на слух и в тексте.'
+    ]
+  },
+  u5: {
+    main:[
+      'Зимние активности и «We\'re…» — новая тема. Первый юнит после каникул, входим постепенно.',
+      '{name} знает основные активности: skating, skiing, sledging. «We\'re skating» с опорой. Прилагательные tall/short/fat — знакомство.',
+      '{name} говорит о зимних активностях: «We\'re making a snowman. Are you sledging? — Yes, we are!» Прилагательные использует с подсказкой.',
+      '{name} уверенно использует «We\'re…» и «Are you…?»: «They\'re snowboarding, and we\'re playing ice hockey!» Описывает снеговика с прилагательными.',
+      'Зимние активности — в свободном владении. {name} описывает сцену на озере легко: «He\'s got a fat tummy and a dirty old hat!» Сказку написал(а) с удовольствием.'
+    ],
+    reading:[
+      'Фонетика (JP Book 2): /or/ (storm, fork) и /er/ (sister, bird) — знакомство.',
+      'Фонетика: /or/ — с опорой. /er/ через er, ir — знакомство.',
+      'Фонетика: /or/ — с поддержкой. /er/ (er, ir, ur) — осваивает.',
+      'Фонетика: /or/ — уверенно. /er/ во всех написаниях — хорошо.',
+      'Фонетика: /or/ и /er/ (er/ir/ur) — отлично. {name} читает: storm, fork, sister, bird, purple — без ошибок.'
+    ]
+  },
+  u6: {
+    main:[
+      'Сезоны и «What do you do in…?» — новая тема. Порядковые числа пока с трудом.',
+      '{name} знает сезонные активности: plant seeds, go to the beach, collect leaves. «What do you do in summer?» понимает, отвечает с опорой.',
+      '{name} говорит о временах года: «In autumn they collect leaves. In winter we make snowmen.» Порядковые числа — с подсказкой.',
+      '{name} уверенно отвечает: «What do you do in spring? — We plant seeds and pick flowers.» Порядковые числа до 31-го — без ошибок.',
+      '{name} говорит о сезонах свободно и с деталями. «My birthday is on the fifteenth of March.» Опрос класса провёл(а) сам(а) — уверенно и с удовольствием.'
+    ],
+    reading:[
+      'Фонетика (JP Book 2): /ar/ (shark, farm) и /air/ (chair, bear) — знакомство.',
+      'Фонетика: /ar/ — с опорой. /air/ (air, ear, are) — знакомство.',
+      'Фонетика: /ar/ — с поддержкой. /air/ — осваивает.',
+      'Фонетика: /ar/ — уверенно. /air/ (chair, stairs, bear) — хорошо.',
+      'Фонетика: /ar/ и /air/ — отлично. {name} читает: shark, farm, chair, stairs, bear — без ошибок.'
+    ]
+  },
+  u7: {
+    main:[
+      'Дом и there is/are — объёмная тема. «There aren\'t any…» пока с трудом.',
+      '{name} знает комнаты: kitchen, bedroom, bathroom, garage. «There\'s a big garden» с опорой. Whose is it? — знакомство.',
+      '{name} описывает дом: «There\'s a kitchen and two bedrooms. There isn\'t a garage.» Whose is it? — с подсказкой.',
+      '{name} уверенно описывает дом: «There are three bedrooms and a big garden. There aren\'t any stairs.» «Whose is this watch? — It\'s mine!» — без ошибок.',
+      'Дом — как на ладони. {name} описывает freely: «There\'s a haunted bedroom and there aren\'t any lights!» Possessive pronouns — свободно. Сценарий написал(а) с деталями.'
+    ],
+    reading:[
+      'Фонетика (JP Book 2): /ou/ (found, brown) и /oi/ (coin, boy) — знакомство.',
+      'Фонетика: /ou/ (ou, ow) — с опорой. /oi/ — знакомство.',
+      'Фонетика: /ou/ — с поддержкой. /oi/ (oi, oy) — осваивает.',
+      'Фонетика: /ou/ — уверенно. /oi/ (coin, boy, toy) — хорошо.',
+      'Фонетика: /ou/ и /oi/ — отлично. {name} читает: found, brown, coin, boy — без ошибок.'
+    ]
+  },
+  u8: {
+    main:[
+      'Город и «Is there a…?» — новая тема. Directions пока с трудом.',
+      '{name} знает места: bank, museum, hospital, library. «Is there a cinema? — Yes, there is» с опорой. Directions — знакомство.',
+      '{name} говорит о городе: «Is there a supermarket? — Yes, there is. Are there any parks? — Yes, there are!» Directions — с подсказкой педагога.',
+      '{name} уверенно ведёт диалог: «Is there a post office near here? — Yes, turn left and go straight on.» Все места города — в активном словаре.',
+      'Город — свободное владение. {name} объясняет маршруты уверенно: «Take the second turning on the right, go past the museum and it\'s on the left.» Одноклассники не заблудились!'
+    ],
+    reading:[
+      'Фонетика (JP Book 2): /ue/ (blue, few) и soft c/g — знакомство. Читаем мини-тексты.',
+      'Фонетика: /ue/ — с опорой. Soft c (face, cycle) — знакомство. Мини-тексты читает медленно.',
+      'Фонетика: /ue/, soft c, soft g — с поддержкой. Мини-тексты — справляется.',
+      'Фонетика: /ue/, soft c/g, ph — уверенно. Читает мини-тексты самостоятельно.',
+      'Фонетика: /ue/, soft c/g, ph — отлично. {name} читает мини-тексты бегло. Словарный запас для чтения растёт быстро.'
+    ]
+  },
+  u9: {
+    main:[
+      'Прошедшее время was/were — финальный юнит. Тема новая, но следующий год даст время для закрепления.',
+      '{name} знает места отдыха: circus, water park, castle. «Where were you? — I was at the beach» с опорой. Was/were — в процессе.',
+      '{name} говорит о прошлом: «Where were you yesterday? — I was at the theme park!» Нерегулярные множественные числа — с подсказкой.',
+      '{name} уверенно использует was/were: «We were at the chocolate factory. There were lots of children!» На устном экзамене говорил(а) свободно.',
+      'Блестящее завершение года! {name} рассказывает о прошлом свободно: «I was at the water park with my family. There were lots of people and it was amazing!» Устный экзамен — уверенно, без подсказок.'
+    ],
+    reading:[
+      'Фонетика (JP Book 2): чтение рассказов и итоговое повторение — в начале пути.',
+      'Фонетика: читает рассказы медленно. Итоговый диктант — с опорой.',
+      'Фонетика: читает короткие рассказы с поддержкой. Диктант — справляется.',
+      'Фонетика: весь JP Book 2 пройден. {name} читает рассказы самостоятельно. К концу года — уверенное чтение.',
+      'Фонетика: JP Book 2 завершён отлично. {name} читает связные тексты свободно. За год — путь от первых звуков до настоящего чтения.'
+    ]
+  }
+};
+
+// ── Генерация отчёта ───────────────────────────────────────
+function buildReport(name,teacher,bi,v,g,a,att,online,hw,app,ts,tt,note){
+  var b=BLOCKS[bi];
+  var key=b.key;
+  var rdata=REPORTS[key];
+  var lines=[];
+  lines.push('📝 Отчёт · '+b.label+' · '+b.period);
+  lines.push('👤 '+name);
+  lines.push('');
+
+  // Основной текст — подставляем имя
+  function fill(s){ return s.replace(/\{name\}/g, name); }
+
+  var mainScore = Math.max(1,Math.min(5,v))-1; // 0-based
+  var mainText = rdata ? fill(rdata.main[mainScore]) : '';
+  var readText = rdata ? fill(rdata.reading[Math.max(1,Math.min(5,v))-1]) : '';
+
+  // Активность
+  var actText = {
+    1: 'На уроках пока сложно включиться — нужна постоянная поддержка педагога. Будем работать над этим.',
+    2: 'На уроках активность пока невысокая, иногда нужно дополнительное побуждение. Потенциал есть — продолжаем.',
+    3: 'На уроках в целом включается в работу, хотя иногда нужна подсказка. В парных заданиях участвует.',
+    4: 'На уроках активен(а) и вовлечён(а), хорошо работает в паре с одноклассниками.',
+    5: 'На уроках — один(а) из самых активных. Инициативен(а), охотно помогает партнёру, задаёт вопросы.'
+  }[a];
+
+  if(mainText) lines.push(mainText);
+  lines.push('');
+
+  // Чтение
+  if(readText){
+    lines.push('📖 Чтение: '+readText);
+    lines.push('');
+  }
+
+  // Активность — добавляем только если отличается от основного текста по смыслу
+  var vLevel = Math.ceil(v);
+  var aLevel = Math.ceil(a);
+  if(Math.abs(vLevel-aLevel)>=2){
+    lines.push('👥 Работа на уроке: '+actText);
+    lines.push('');
+  }
+
+  // Статистика — человеческим языком
+  var statLines = [];
+
+  if(att){
+    var attN=parseInt(att), attMax=b.att;
+    var attPct=Math.round(attN/attMax*100);
+    if(attPct===100) statLines.push('✅ Посещаемость: '+attN+' из '+attMax+' уроков — ни одного пропуска. Это важно: регулярность даёт результат.');
+    else if(attPct>=80) statLines.push('📅 Посещаемость: '+attN+' из '+attMax+' уроков. Пропуски есть, но несущественные — материал усвоен в полном объёме.');
+    else if(attPct>=60) statLines.push('📅 Посещаемость: '+attN+' из '+attMax+' уроков. Пропущено несколько занятий — часть материала была отработана онлайн. Постараемся восстановить в следующем блоке.');
+    else statLines.push('📅 Посещаемость: '+attN+' из '+attMax+' уроков. Много пропусков — это влияет на темп. Рекомендуем уделить особое внимание регулярности посещений.');
+    if(online==='yes') statLines[statLines.length-1]+=' Все пропущенные уроки отработаны онлайн — молодец!';
+    else if(online==='partial') statLines[statLines.length-1]+=' Часть пропусков отработана онлайн.';
+  }
+
+  if(hw){
+    var hwN=parseInt(hw);
+    if(hwN>=90) statLines.push('📚 Домашние задания: '+hwN+'% выполнено. Отличная дисциплина — это напрямую влияет на результат.');
+    else if(hwN>=70) statLines.push('📚 Домашние задания: '+hwN+'% выполнено. Хороший показатель. Чуть больше регулярности — и прогресс ускорится.');
+    else if(hwN>=50) statLines.push('📚 Домашние задания: '+hwN+'% выполнено. Рекомендуем уделять им больше внимания — 10–15 минут в день дают заметный эффект.');
+    else statLines.push('📚 Домашние задания: '+hwN+'% выполнено. Домашняя работа выполняется редко — это сдерживает прогресс. Попробуйте выделить постоянное время для занятий, даже короткое.');
+  }
+
+  if(app){
+    if(app==='always') statLines.push('📱 Приложение для тренировки слов: занимается регулярно. Отлично — слова в памяти закрепляются именно через повторение.');
+    else if(app==='sometimes') statLines.push('📱 Приложение для тренировки слов: занимается иногда. Рекомендуем сделать это ежедневной привычкой — 5–7 минут перед сном хватит, чтобы слова перешли в долгосрочную память.');
+    else if(app==='rarely') statLines.push('📱 Приложение для тренировки слов: занимается редко. Без регулярного повторения слова быстро забываются. Попробуйте вместе с ребёнком: 5 минут в день — и результат не заставит ждать.');
+    else if(app==='never') statLines.push('📱 Приложение для тренировки слов: пока не используется. Это простой и эффективный способ закрепить лексику дома — занимает 5 минут в день. Рекомендуем начать: приложение бесплатное, ребёнку понравится.');
+  }
+
+  if(ts&&tt&&parseFloat(tt)>0){
+    var pct=Math.round(parseFloat(ts)/parseFloat(tt)*100);
+    var testComment = pct>=90 ? 'Отличный результат.' : pct>=75 ? 'Хороший результат.' : pct>=60 ? 'Есть над чем поработать в следующем блоке.' : 'Тест показал пробелы — разберём их на уроках.';
+    statLines.push('📝 Тест: '+ts+' из '+tt+' баллов ('+pct+'%). '+testComment);
+  } else if(ts){
+    statLines.push('📝 Тест: '+ts+' баллов.');
+  }
+
+  if(statLines.length){ lines.push(statLines.join('\n')); lines.push(''); }
+
+  if(note){ lines.push('💬 '+note); lines.push(''); }
+  lines.push('С уважением, команда Speak&Smile | '+(teacher||'[педагог]'));
+  return lines.join('\n');
+}
+
+function genOne(){
+  var name=document.getElementById('cname').value.trim();
+  var teacher=currentTeacher||'';
+  var att=document.getElementById('att').value;
+  var hw=document.getElementById('hw').value;
+  var tsEl=document.getElementById('ts'); var ts=tsEl?tsEl.value:'';
+  var ttEl=document.getElementById('tt'); var tt=ttEl?ttEl.value:'';
+  var note=document.getElementById('note').value.trim();
+  var txt=buildReport(name,teacher,S.bi,S.v,S.g,S.a,att,S.o,hw,S.app,ts,tt,note);
+  var box=document.getElementById('rbox');
+  box.innerHTML=txt.replace(/\n/g,'<br>');
+  box.style.display='block';
+  document.getElementById('rempty').style.display='none';
+  document.getElementById('rhint').style.display='block';
+  document.getElementById('cpbtn').style.display='';
+  document.getElementById('saveOneArea').style.display='block';
+}
+
+function cpOne(){
+  var box=document.getElementById('rbox');
+  var btn=document.getElementById('cpbtn');
+  cpText(box.innerText||'',btn);
+}
+
+function cpText(text,btn){
+  navigator.clipboard.writeText(text).then(function(){
+    btn.textContent='✓ Скопировано';
+    btn.classList.add('done');
+    setTimeout(function(){btn.textContent='Копировать';btn.classList.remove('done');},2000);
+  }).catch(function(){
+    var ta=document.createElement('textarea');
+    ta.value=text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    btn.textContent='✓ Скопировано'; btn.classList.add('done');
+    setTimeout(function(){btn.textContent='Копировать';btn.classList.remove('done');},2000);
+  });
+}
+
+function saveOne(){
+  if(!currentTeacher){ alert('Сначала войдите как педагог'); return; }
+  var name=document.getElementById('cname').value.trim();
+  if(!name) return;
+  var key=makeKey(currentTeacher,name,S.bi);
+  var data={
+    v:S.v,g:S.g,a:S.a,o:S.o,app:S.app,
+    att:document.getElementById('att').value,
+    hw:document.getElementById('hw').value,
+    ts:document.getElementById('ts')?document.getElementById('ts').value:'',
+    tt:document.getElementById('tt')?document.getElementById('tt').value:'',
+    note:document.getElementById('note').value.trim(),
+    savedAt:new Date().toLocaleDateString('ru')
+  };
+  localStorage.setItem(key,JSON.stringify(data));
+  var idxKey='ss2z_idx_'+currentTeacher;
+  var idx=JSON.parse(localStorage.getItem(idxKey)||'[]');
+  var entry=name+'||'+S.bi;
+  if(idx.indexOf(entry)===-1){ idx.push(entry); localStorage.setItem(idxKey,JSON.stringify(idx)); }
+  var msg=document.getElementById('saveOneMsg');
+  msg.textContent='✓ Сохранено · '+name+' · '+BLOCKS[S.bi].label;
+  setTimeout(function(){msg.textContent='';},3000);
+}
+
+// ── Group tab ──────────────────────────────────────────────
+var PS={};
+
+function buildPupilRows(){
+  var html='';
+  for(var i=1;i<=12;i++){
+    html+='<div class="pupil-row">';
+    html+='<span class="pupil-num">#'+i+'</span>';
+    html+='<div class="pupil-grid">';
+    html+='<div class="pupil-field full"><label>Имя</label><input type="text" id="p'+i+'_name" placeholder="Имя ученика"></div>';
+    html+='<div class="pupil-field"><label>Лексика / Песни</label><div class="mini-scores" id="p'+i+'_v">';
+    for(var s=1;s<=5;s++) html+='<button class="msb" onclick="mSel('+i+',\'v\','+s+',this)">'+s+'</button>';
+    html+='</div></div>';
+    html+='<div class="pupil-field"><label>Грамм. / Фразы</label><div class="mini-scores" id="p'+i+'_g">';
+    for(var s=1;s<=5;s++) html+='<button class="msb" onclick="mSel('+i+',\'g\','+s+',this)">'+s+'</button>';
+    html+='</div></div>';
+    html+='<div class="pupil-field"><label>Активность</label><div class="mini-scores" id="p'+i+'_a">';
+    for(var s=1;s<=5;s++) html+='<button class="msb" onclick="mSel('+i+',\'a\','+s+',this)">'+s+'</button>';
+    html+='</div></div>';
+    html+='<div class="pupil-field"><label>Посещаемость</label><input type="number" id="p'+i+'_att" min="0" placeholder="—" style="width:60px"></div>';
+    html+='<div class="pupil-field"><label>ДЗ %</label><input type="number" id="p'+i+'_hw" min="0" max="100" placeholder="—" style="width:60px"></div>';
+    html+='<div class="pupil-field"><label>Приложение</label><div class="mini-opts" id="p'+i+'_app">';
+    html+='<button class="mob" onclick="mApp('+i+',\'always\',this)">✓</button>';
+    html+='<button class="mob" onclick="mApp('+i+',\'sometimes\',this)">иногда</button>';
+    html+='<button class="mob" onclick="mApp('+i+',\'rarely\',this)">редко</button>';
+    html+='<button class="mob" onclick="mApp('+i+',\'never\',this)">нет</button>';
+    html+='</div></div>';
+    html+='<div class="pupil-field"><label>Тест</label><input type="number" id="p'+i+'_ts" min="0" placeholder="—" style="width:60px"></div>';
+    html+='<div class="pupil-field full"><label>Заметка</label><textarea id="p'+i+'_note" placeholder="необязательно"></textarea></div>';
+    html+='</div></div>';
+    if(!PS[i]) PS[i]={v:0,g:0,a:0,app:''};
+  }
+  document.getElementById('pupilRows').innerHTML=html;
+}
+
+function mSel(i,k,val,btn){
+  PS[i][k]=val;
+  document.querySelectorAll('#p'+i+'_'+k+' .msb').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+}
+function mApp(i,val,btn){
+  PS[i].app=val;
+  document.querySelectorAll('#p'+i+'_app .mob').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+}
+
+function genGroup(){
+  var teacher=document.getElementById('gTeacher').value.trim()||currentTeacher;
+  var tt=document.getElementById('gTestTotal').value;
+  var out=''; var count=0;
+  for(var i=1;i<=12;i++){
+    var name=document.getElementById('p'+i+'_name').value.trim();
+    if(!name) continue;
+    count++;
+    var p=PS[i];
+    var att=document.getElementById('p'+i+'_att').value;
+    var hw=document.getElementById('p'+i+'_hw').value;
+    var ts=document.getElementById('p'+i+'_ts').value;
+    var note=document.getElementById('p'+i+'_note').value.trim();
+    var txt=buildReport(name,teacher,GS.bi,p.v||0,p.g||0,p.a||0,att,'',hw,p.app,ts,tt,note);
+    var safeName=name.replace(/'/g,"\\'");
+    out+='<div class="greport-item">';
+    out+='<div class="greport-name">'+name+'<button class="cpbtn" onclick="cpGroupItem(this)">Копировать</button></div>';
+    out+='<div class="greport-text" data-text="'+txt.replace(/"/g,'&quot;')+'">'+txt.replace(/\n/g,'<br>')+'</div>';
+    out+='</div>';
+  }
+  document.getElementById('groupOutput').innerHTML=out||'<div style="color:#aaa;text-align:center;padding:20px">Нет данных</div>';
+  document.getElementById('saveBtnGroup').style.display=count?'':'none';
+}
+
+function cpGroupItem(btn){
+  var text=btn.parentElement.nextElementSibling.getAttribute('data-text');
+  cpText(text,btn);
+}
+
+function saveGroup(){
+  if(!currentTeacher){alert('Сначала войдите как педагог');return;}
+  var saved=0;
+  for(var i=1;i<=12;i++){
+    var name=document.getElementById('p'+i+'_name').value.trim();
+    if(!name) continue;
+    var key=makeKey(currentTeacher,name,GS.bi);
+    var data={
+      v:PS[i].v,g:PS[i].g,a:PS[i].a,app:PS[i].app,
+      att:document.getElementById('p'+i+'_att').value,
+      hw:document.getElementById('p'+i+'_hw').value,
+      ts:document.getElementById('p'+i+'_ts').value,
+      tt:document.getElementById('gTestTotal').value,
+      note:document.getElementById('p'+i+'_note').value.trim(),
+      savedAt:new Date().toLocaleDateString('ru')
+    };
+    localStorage.setItem(key,JSON.stringify(data));
+    var idxKey='ss2z_idx_'+currentTeacher;
+    var idx=JSON.parse(localStorage.getItem(idxKey)||'[]');
+    var entry=name+'||'+GS.bi;
+    if(idx.indexOf(entry)===-1){idx.push(entry);localStorage.setItem(idxKey,JSON.stringify(idx));}
+    saved++;
+  }
+  var msg=document.getElementById('saveGroupMsg');
+  msg.textContent='✓ Сохранено: '+saved+' учеников · '+BLOCKS[GS.bi].label;
+  setTimeout(function(){msg.textContent='';},3000);
+}
+
+// ── Pupils tab ─────────────────────────────────────────────
+function loadPupils(){
+  if(!currentTeacher){
+    document.getElementById('pupilsList').innerHTML='<div style="color:#aaa;font-size:13px;text-align:center;padding:20px">Сначала войдите как педагог</div>';
+    return;
+  }
+  var idxKey='ss2z_idx_'+currentTeacher;
+  var idx=JSON.parse(localStorage.getItem(idxKey)||'[]');
+  var pupils={};
+  idx.forEach(function(entry){
+    var parts=entry.split('||');
+    var name=parts[0], bi=parseInt(parts[1]);
+    if(!pupils[name]) pupils[name]=[];
+    if(pupils[name].indexOf(bi)===-1) pupils[name].push(bi);
+  });
+  var names=Object.keys(pupils);
+  var container=document.getElementById('pupilsList');
+  if(!names.length){
+    container.innerHTML='<div style="color:#aaa;font-size:13px;text-align:center;padding:20px">Нет сохранённых данных</div>';
+    return;
+  }
+  container.innerHTML='';
+  names.forEach(function(name){
+    var blocks=pupils[name].sort(function(a,b){return a-b;});
+    var div=document.createElement('div');
+    div.className='pupil-card';
+    var badges='';
+    BLOCKS.forEach(function(b,idx){
+      var has=blocks.indexOf(idx)!==-1;
+      var cls='unit-badge'+(has?' has-data':'');
+      var lbl=idx===0?'G':'U'+idx;
+      if(has) badges+='<span class="'+cls+'" onclick="showBlockData(\''+name+'\','+idx+')">'+lbl+'</span>';
+      else badges+='<span class="'+cls+'">'+lbl+'</span>';
+    });
+    div.innerHTML='<div class="pupil-card-name">'+name+'</div>'+
+      '<div class="unit-badges">'+badges+'</div>'+
+      '<div style="display:flex;gap:8px;margin-top:8px">'+
+        '<button class="year-btn" onclick="showYearReport(\''+name+'\')">📊 Годовой отчёт</button>'+
+        '<button class="del-btn" onclick="delPupil(\''+name+'\')">Удалить</button>'+
+      '</div>';
+    container.appendChild(div);
+  });
+  document.getElementById('yearCard').style.display='none';
+}
+
+function showBlockData(name,bi){
+  var key=makeKey(currentTeacher,name,bi);
+  var d=JSON.parse(localStorage.getItem(key)||'null');
+  if(!d){alert('Нет данных');return;}
+  var b=BLOCKS[bi];
+  var msg=b.label+'\n'+
+    (b.isGenki?'Песни/движение':'Лексика')+': '+d.v+'/5  '+
+    (b.isGenki?'Фразы':'Грамматика')+': '+d.g+'/5  Активность: '+d.a+'/5\n'+
+    (d.att?'Посещаемость: '+d.att+'/'+b.att+'\n':'')+
+    (d.hw?'ДЗ: '+d.hw+'%\n':'')+
+    (d.ts?'Тест: '+d.ts+(d.tt?'/'+d.tt:'')+(d.tt&&parseFloat(d.tt)>0?' ('+Math.round(parseFloat(d.ts)/parseFloat(d.tt)*100)+'%)':'')+'\n':'')+
+    (d.note?'Заметка: '+d.note+'\n':'')+
+    'Сохранено: '+d.savedAt;
+  alert(msg);
+}
+
+function delPupil(name){
+  if(!confirm('Удалить все данные по ученику «'+name+'»?')) return;
+  BLOCKS.forEach(function(b,i){ localStorage.removeItem(makeKey(currentTeacher,name,i)); });
+  var idxKey='ss2z_idx_'+currentTeacher;
+  var idx=JSON.parse(localStorage.getItem(idxKey)||'[]');
+  idx=idx.filter(function(e){return e.split('||')[0]!==name;});
+  localStorage.setItem(idxKey,JSON.stringify(idx));
+  loadPupils();
+  document.getElementById('yearCard').style.display='none';
+}
+
+function avg(arr){ return arr.length?(arr.reduce(function(a,b){return a+b;},0)/arr.length).toFixed(1):'—'; }
+function trend(arr){
+  if(arr.length<2) return '';
+  if(arr[arr.length-1]>arr[0]) return '📈';
+  if(arr[arr.length-1]<arr[0]) return '📉';
+  return '→';
+}
+function scClass(v){ if(!v) return ''; return 'score-cell score-'+v; }
+
+function showYearReport(name){
+  var rows='';
+  var totalAtt=0,totalHw=0,hwCount=0;
+  var testPcts=[],vArr=[],gArr=[],aArr=[];
+  var completed=0;
+  BLOCKS.forEach(function(b,bi){
+    var key=makeKey(currentTeacher,name,bi);
+    var d=JSON.parse(localStorage.getItem(key)||'null');
+    if(d){
+      completed++;
+      var pct=(d.ts&&d.tt&&parseFloat(d.tt)>0)?Math.round(parseFloat(d.ts)/parseFloat(d.tt)*100):null;
+      if(pct!==null) testPcts.push(pct);
+      if(d.v) vArr.push(parseInt(d.v));
+      if(d.g) gArr.push(parseInt(d.g));
+      if(d.a) aArr.push(parseInt(d.a));
+      if(d.att) totalAtt+=parseInt(d.att);
+      if(d.hw){totalHw+=parseFloat(d.hw);hwCount++;}
+      rows+='<tr>'+
+        '<td style="font-size:10px;color:#888;max-width:80px">'+b.label+'</td>'+
+        '<td class="'+scClass(d.v)+'">'+(d.v||'—')+'</td>'+
+        '<td class="'+scClass(d.g)+'">'+(d.g||'—')+'</td>'+
+        '<td class="'+scClass(d.a)+'">'+(d.a||'—')+'</td>'+
+        '<td>'+(d.att?d.att+'/'+b.att:'—')+'</td>'+
+        '<td>'+(d.hw?d.hw+'%':'—')+'</td>'+
+        '<td>'+(pct!==null?pct+'%':(d.ts||'—'))+'</td>'+
+      '</tr>';
+    } else {
+      rows+='<tr>'+
+        '<td style="font-size:10px;color:#888">'+b.label+'</td>'+
+        '<td colspan="6" style="color:#ddd;font-size:11px">нет данных</td>'+
+      '</tr>';
+    }
+  });
+  var avgV=avg(vArr),avgG=avg(gArr),avgA=avg(aArr);
+  var avgHw=hwCount?Math.round(totalHw/hwCount)+'%':'—';
+  var avgTest=testPcts.length?Math.round(testPcts.reduce(function(a,b){return a+b;},0)/testPcts.length)+'%':'—';
+  var totalAttStr=totalAtt>0?totalAtt+'/'+BLOCKS.reduce(function(s,b){return s+b.att;},0):'—';
+  var vn=parseFloat(avgV),gn=parseFloat(avgG),an=parseFloat(avgA);
+  var sp=[];
+  sp.push(vn>=4?'лексику усваивает уверенно':vn>=3?'лексику осваивает постепенно':'лексика требует дополнительной работы');
+  sp.push(gn>=4?'грамматику применяет хорошо':gn>=3?'грамматика в процессе освоения':'грамматика требует дополнительного внимания');
+  sp.push(an>=4?'на уроках активен(а) и вовлечён(а)':an>=3?'на уроках в целом включается в работу':'активность требует поддержки');
+  var summaryHtml=
+    '<p>Дорогие родители!</p><br>'+
+    '<p>Представляем итоговый отчёт за учебный год по курсу <strong>Give Me Five! 2 (нулевой уровень)</strong>.</p>'+
+    '<p>👤 <strong>Ученик:</strong> '+name+'</p><br>'+
+    '<p>За год пройдено <strong>'+completed+' из '+BLOCKS.length+'</strong> блоков.</p>'+
+    '<p>В целом: '+sp.join('; ')+'.</p><br>'+
+    '<p>📊 <strong>Средние показатели:</strong><br>'+
+    'Лексика/Песни: '+avgV+'/5 '+trend(vArr)+
+    ' · Грамматика/Фразы: '+avgG+'/5 '+trend(gArr)+
+    ' · Активность: '+avgA+'/5 '+trend(aArr)+'<br>'+
+    'Посещаемость: '+totalAttStr+' · ДЗ: '+avgHw+' · Тесты: '+avgTest+'</p><br>'+
+    '<p>Спасибо за доверие и совместную работу!</p><br>'+
+    '<p>С уважением,<br>Команда Speak&amp;Smile | '+(currentTeacher||'[педагог]')+'</p>';
+
+  var summId='ysumm_'+name.replace(/\s+/g,'_');
+  var avgVc=scClass(Math.round(parseFloat(avgV)));
+  var avgGc=scClass(Math.round(parseFloat(avgG)));
+  var avgAc=scClass(Math.round(parseFloat(avgA)));
+  var totalRow=
+    '<tr style="background:#6C3FC5;color:white;font-weight:700">'+
+    '<td style="text-align:left;padding-left:8px;color:white;font-size:10px">Итого за год</td>'+
+    '<td class="'+avgVc+'" style="color:white">'+avgV+'</td>'+
+    '<td class="'+avgGc+'" style="color:white">'+avgG+'</td>'+
+    '<td class="'+avgAc+'" style="color:white">'+avgA+'</td>'+
+    '<td style="color:white">'+totalAttStr+'</td>'+
+    '<td style="color:white">'+avgHw+'</td>'+
+    '<td style="color:white">'+avgTest+'</td>'+
+    '</tr>';
+
+  document.getElementById('yearTitle').textContent='Годовой отчёт · '+name;
+  document.getElementById('yearContent').innerHTML=
+    '<table class="year-table">'+
+      '<thead><tr><th>Блок</th><th>Лекс.</th><th>Грам.</th><th>Акт.</th><th>Посещ.</th><th>ДЗ</th><th>Тест</th></tr></thead>'+
+      '<tbody>'+rows+totalRow+'</tbody>'+
+    '</table>'+
+    '<div style="display:flex;justify-content:flex-end;margin-bottom:10px">'+
+      '<button class="cpbtn" id="ycpbtn_'+name.replace(/\s+/g,'_')+'" onclick="cpYearReport(\''+name+'\')">Копировать отчёт</button>'+
+    '</div>'+
+    '<div class="year-summary" id="'+summId+'">'+summaryHtml+'</div>';
+  var card=document.getElementById('yearCard');
+  card.style.display='block';
+  card.scrollIntoView({behavior:'smooth'});
+}
+
+function cpYearReport(name){
+  var summId='ysumm_'+name.replace(/\s+/g,'_');
+  var btnId='ycpbtn_'+name.replace(/\s+/g,'_');
+  var el=document.getElementById(summId);
+  var btn=document.getElementById(btnId);
+  if(el&&btn) cpText(el.innerText||'',btn);
+}
+</script>
+</body>
+</html>
