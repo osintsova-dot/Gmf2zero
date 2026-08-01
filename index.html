@@ -461,24 +461,24 @@ textarea { resize: vertical; min-height: 56px; }
 // ── Данные блоков ──────────────────────────────────────────
 var BLOCKS = [
   { key:'genki',    label:'Genki English',                    period:'Сентябрь–Октябрь', att:12, isGenki:true,  hasTest:false,
-    v:'песни и движение',        g:'разговорные фразы' },
-  { key:'u1',       label:'Unit 1 — Move your body!',         period:'Октябрь–Ноябрь',   att:9,  isGenki:false, hasTest:true,
+    v:'команды, приветствия, эмоции, числа 1–12, цвета, животные, овощи', g:'What\'s your name? / My name is… / I\'m happy. / I can fly! / I like…' },
+  { key:'u1',       label:'Unit 1 · Move your body — Спорт и движение',         period:'Октябрь–Ноябрь',   att:9,  isGenki:false, hasTest:true,
     v:'виды спорта',             g:'I play/go… / Do you…? / Can you kick?' },
-  { key:'u2',       label:'Unit 2 — Let\'s go shopping!',     period:'Ноябрь',            att:6,  isGenki:false, hasTest:true,
-    v:'еда и фрукты',            g:'Can I have…? / a/an/some / How much?' },
-  { key:'u3',       label:'Unit 3 — At the zoo',              period:'Ноябрь–Декабрь',   att:6,  isGenki:false, hasTest:true,
+  { key:'u2',       label:'Unit 2 · Let\'s go shopping! — Покупки и продукты',     period:'Ноябрь',            att:6,  isGenki:false, hasTest:true,
+    v:'продукты (bread, tomatoes, potatoes, peaches, yoghurt…)', g:'Can I have…? / a/an/some / How much?' },
+  { key:'u3',       label:'Unit 3 · At the zoo — В зоопарке',              period:'Ноябрь–Декабрь',   att:6,  isGenki:false, hasTest:true,
     v:'дикие животные',          g:'has/have got / Has it got…?' },
-  { key:'u4',       label:'Unit 4 — The nature trail',        period:'Январь',            att:6,  isGenki:false, hasTest:true,
-    v:'природа, предлоги движения', g:'Present Continuous / I\'m (climbing)' },
-  { key:'u5',       label:'Unit 5 — The frozen lake',         period:'Февраль',           att:6,  isGenki:false, hasTest:true,
+  { key:'u4',       label:'Unit 4 · The nature trail — На природе',        period:'Январь',            att:6,  isGenki:false, hasTest:true,
+    v:'природа (forest, hill, river, lake, path, bridge…)', g:'Present Continuous / I\'m (climbing)' },
+  { key:'u5',       label:'Unit 5 · The frozen lake — Зимние забавы',         period:'Февраль',           att:6,  isGenki:false, hasTest:true,
     v:'зимние активности',        g:'We\'re… / Are you…? / прилагательные' },
-  { key:'u6',       label:'Unit 6 — All year round',          period:'Февраль–Март',      att:6,  isGenki:false, hasTest:true,
+  { key:'u6',       label:'Unit 6 · All year round — Круглый год',          period:'Февраль–Март',      att:6,  isGenki:false, hasTest:true,
     v:'сезонные активности',      g:'What do you do in…? / порядковые числа' },
-  { key:'u7',       label:'Unit 7 — My house',                period:'Март',              att:6,  isGenki:false, hasTest:true,
+  { key:'u7',       label:'Unit 7 · My house — Мой дом',                period:'Март',              att:6,  isGenki:false, hasTest:true,
     v:'комнаты дома',             g:'There is/are… / Whose is it? mine/yours' },
-  { key:'u8',       label:'Unit 8 — All around the town',     period:'Апрель',            att:6,  isGenki:false, hasTest:true,
-    v:'места в городе, directions', g:'Is there a…? / Are there any…?' },
-  { key:'u9',       label:'Unit 9 — Holiday fun',             period:'Апрель–Май',        att:9,  isGenki:false, hasTest:true,
+  { key:'u8',       label:'Unit 8 · All around the town — Наш город',     period:'Апрель',            att:6,  isGenki:false, hasTest:true,
+    v:'места в городе (bank, museum, train station, car park…)', g:'Is there a…? / Are there any…?' },
+  { key:'u9',       label:'Unit 9 · Holiday fun — Каникулы и развлечения',             period:'Апрель–Май',        att:9,  isGenki:false, hasTest:true,
     v:'места отдыха',             g:'Where were you? / I was… / was/were' }
 ];
 // att:9 = Unit 9(6) + Final(1) + Speaking(1) + Резерв(1). Итого: 12+9+6*8+9 = 72 ✓
@@ -599,11 +599,11 @@ var REPORTS = {
       'За 12 вводных уроков {name} сделал(а) именно то, ради чего создан этот блок: заговорил(а). Представляется, выражает эмоции, говорит о предпочтениях, задаёт вопросы. В играх инициативен(а), помогает одноклассникам — это признак настоящей уверенности.'
     ],
     reading:[
-      'Фонетика (JP Book 1): знакомство со звуками английского. Пока буквы и звуки путаются — нужно время.',
-      'Фонетика (JP Book 1): первые группы звуков — s, a, t, i, p, n. {name} пробует читать: sat, pin, nap.',
-      'Фонетика (JP Book 1): прошли 20 из 26 звуков. {name} читает CVC-слова: sat, pin, hen, dog, fun.',
-      'Фонетика (JP Book 1): все 26 звуков пройдены. {name} читает первые слова уверенно. Фундамент заложен.',
-      'Фонетика (JP Book 1): все 26 звуков усвоены отлично. {name} читает слова самостоятельно и делает первые попытки читать предложения.'
+      'Фонетика (Phonics Hero, Часть 1): знакомство со звуками английского. Пока буквы и звуки путаются — нужно время.',
+      'Фонетика (Phonics Hero, Часть 1): первые группы звуков — s, a, t, i, p, n. {name} пробует читать: sat, pin, nap.',
+      'Фонетика (Phonics Hero, Часть 1): прошли 20 из 26 звуков. {name} читает CVC-слова: sat, pin, hen, dog, fun.',
+      'Фонетика (Phonics Hero, Часть 1): все 26 звуков пройдены. {name} читает первые слова уверенно. Фундамент заложен.',
+      'Фонетика (Phonics Hero, Часть 1): все 26 звуков усвоены отлично. {name} читает слова самостоятельно и делает первые попытки читать предложения.'
     ]
   },
   u1: {
@@ -615,11 +615,11 @@ var REPORTS = {
       'Отличный юнит! {name} говорит о спорте свободно: «I play volleyball and go cycling. Can you kick? — Yes, I can!» Все действия в активном словаре. Диалоги — без подсказок.'
     ],
     reading:[
-      'Фонетика (JP Book 2): ch, sh, th, ng — знакомство. Пока в начале пути.',
-      'Фонетика: ch (chip, much), sh (ship, fish) — с опорой. th и ng — знакомство.',
-      'Фонетика: ch, sh, th, ng — знакомы. {name} читает с небольшой поддержкой: chip, shop, ring.',
-      'Фонетика: ch, sh, th, ng — усвоены. {name} читает уверенно: chip, shop, fish, this, ring, long.',
-      'Фонетика: ch, sh, th (оба варианта), ng — отлично. {name} читает бегло, различает звуки без ошибок.'
+      'Фонетика (Phonics Hero, Часть 2): первые диграфы — ai, oa, ie, ee, or — знакомство. Пока в начале пути.',
+      'Фонетика: диграфы ai (rain), oa (boat), ie (pie) — с опорой. ee·or — знакомство.',
+      'Фонетика: диграфы ai·oa·ie, ee·or, ng·oo — знакомы. {name} читает с небольшой поддержкой: rain, boat, tree, moon.',
+      'Фонетика: диграфы ai·oa·ie, ee·or, ng·oo, ch·sh·th — усвоены. {name} читает уверенно: rain, tree, ring, chip, ship.',
+      'Фонетика: все диграфы блока (ai·oa·ie, ee·or, ng·oo, ch·sh·th, ou·oi) — отлично. {name} читает бегло, различает звуки без ошибок.'
     ]
   },
   u2: {
@@ -631,11 +631,11 @@ var REPORTS = {
       '{name} говорит о еде и покупках свободно. A/an/some — естественно. «How much is this lemon? — It\'s thirty pence.» Рецепт написал(а) с удовольствием.'
     ],
     reading:[
-      'Фонетика (JP Book 2): Magic e (a-e, i-e) — знакомство.',
-      'Фонетика: Magic e (a-e: cake, name) — с опорой. Путает с короткой a.',
-      'Фонетика: Magic e (a-e, i-e: kite, bike) — с поддержкой.',
-      'Фонетика: Magic e (a-e, e-e, i-e) — уверенно: cake, Pete, kite, smile.',
-      'Фонетика: Magic e всех типов — отлично. {name} читает длинные гласные свободно, понимает правило.'
+      'Фонетика (Phonics Hero): диграфы ou·oi, ue·er·ar — знакомство.',
+      'Фонетика: ou (out) и oi (coin) — с опорой. ue·er·ar — знакомство.',
+      'Фонетика: ou·oi, ue·er·ar — с поддержкой. Magic E (краткий/долгий гласный) — начинаем.',
+      'Фонетика: диграфы и Magic E a-e — уверенно: out, coin, blue, star, cake, name.',
+      'Фонетика: все диграфы Части 2 и Magic E a-e — отлично. {name} читает свободно, понимает правило «молчаливой e».'
     ]
   },
   u3: {
@@ -647,11 +647,11 @@ var REPORTS = {
       '{name} описывает животных легко и точно: «It\'s got a beak, wings and feathers — it\'s a parrot!» Have got — свободно. Факт-файлы написал(а) с деталями.'
     ],
     reading:[
-      'Фонетика (JP Book 2): /ee/ (tree, leaf) и /ie/ (pie, kite) — знакомство.',
-      'Фонетика: /ee/ (ee, ea) — с опорой. /ie/ — знакомство.',
-      'Фонетика: /ee/ — с поддержкой. /ie/ (ie, i-e, y, igh) — осваивает.',
-      'Фонетика: /ee/ — уверенно. /ie/ (pie, kite, sky, night) — хорошо.',
-      'Фонетика: /ee/ и /ie/ во всех написаниях — отлично. {name} читает без подсказок.'
+      'Фонетика (Phonics Hero): Magic E (a-e, i-e, o-e, u-e) — знакомство.',
+      'Фонетика: Magic E a-e (cake, name) — с опорой. i-e — знакомство.',
+      'Фонетика: Magic E (a-e, i-e) — с поддержкой. o-e (bone), u-e (cube) — осваивает.',
+      'Фонетика: Magic E (a-e, i-e, o-e, u-e: cake, kite, bone, cube) — уверенно.',
+      'Фонетика: все варианты Magic E — отлично. {name} читает длинные гласные без подсказок и применяет правило сам(а).'
     ]
   },
   u4: {
@@ -663,11 +663,11 @@ var REPORTS = {
       'Present Continuous — как родной. {name} описывает любую сцену: «They\'re jumping over the stream and running along the path!» Приключенческую историю написал(а) с живыми деталями.'
     ],
     reading:[
-      'Фонетика (JP Book 2): /oa/ (coat, grow) и /oo/ — знакомство.',
-      'Фонетика: /oa/ (oa, ow, o-e) — с опорой. /oo/ — знакомство.',
-      'Фонетика: /oa/ — с поддержкой. /oo/ длинный (moon) и короткий (book) — осваивает.',
-      'Фонетика: /oa/ — уверенно. /oo/ оба варианта — хорошо различает.',
-      'Фонетика: /oa/ и /oo/ (оба варианта) — отлично. {name} различает moon и book на слух и в тексте.'
+      'Фонетика (Phonics Hero): /эй/ (ai·ay·a-e) и /и:/ (ee·ea·e-e·y) — знакомство.',
+      'Фонетика: /эй/ (rain, play) — с опорой. /и:/ — знакомство.',
+      'Фонетика: /эй/ — с поддержкой. /и:/ (tree, sea, happy) — осваивает.',
+      'Фонетика: /эй/ и /и:/ — уверенно. Начинаем /ай/ (pie, night).',
+      'Фонетика: /эй/ и /и:/ во всех написаниях — отлично. {name} понимает, что один звук может писаться по-разному.'
     ]
   },
   u5: {
@@ -679,11 +679,11 @@ var REPORTS = {
       'Зимние активности — в свободном владении. {name} описывает сцену на озере легко: «He\'s got a fat tummy and a dirty old hat!» Сказку написал(а) с удовольствием.'
     ],
     reading:[
-      'Фонетика (JP Book 2): /or/ (storm, fork) и /er/ (sister, bird) — знакомство.',
-      'Фонетика: /or/ — с опорой. /er/ через er, ir — знакомство.',
-      'Фонетика: /or/ — с поддержкой. /er/ (er, ir, ur) — осваивает.',
-      'Фонетика: /or/ — уверенно. /er/ во всех написаниях — хорошо.',
-      'Фонетика: /or/ и /er/ (er/ir/ur) — отлично. {name} читает: storm, fork, sister, bird, purple — без ошибок.'
+      'Фонетика (Phonics Hero): /ай/ (ie·igh·y·i-e) и /оу/ (oa·ow·o-e) — знакомство.',
+      'Фонетика: /ай/ (pie, night, sky) — с опорой. /оу/ — знакомство.',
+      'Фонетика: /ай/ — с поддержкой. /оу/ (coat, grow, stone) — осваивает.',
+      'Фонетика: /ай/ и /оу/ — уверенно. /ю:/ (blue, new, cube) — хорошо.',
+      'Фонетика: /ай/, /оу/ и /ю:/ во всех написаниях — отлично. {name} читает: night, sky, coat, snow, blue, new — без ошибок.'
     ]
   },
   u6: {
@@ -695,11 +695,11 @@ var REPORTS = {
       '{name} говорит о сезонах свободно и с деталями. «My birthday is on the fifteenth of March.» Опрос класса провёл(а) сам(а) — уверенно и с удовольствием.'
     ],
     reading:[
-      'Фонетика (JP Book 2): /ar/ (shark, farm) и /air/ (chair, bear) — знакомство.',
-      'Фонетика: /ar/ — с опорой. /air/ (air, ear, are) — знакомство.',
-      'Фонетика: /ar/ — с поддержкой. /air/ — осваивает.',
-      'Фонетика: /ar/ — уверенно. /air/ (chair, stairs, bear) — хорошо.',
-      'Фонетика: /ar/ и /air/ — отлично. {name} читает: shark, farm, chair, stairs, bear — без ошибок.'
+      'Фонетика (Phonics Hero): /ау/ (ou·ow), /ой/ (oi·oy) и /ё:/ (er·ir·ur) — знакомство.',
+      'Фонетика: /ау/ (out, cow) — с опорой. /ой/ (coin, boy) — знакомство.',
+      'Фонетика: /ау/ и /ой/ — с поддержкой. /ё:/ (bird, turn) — осваивает.',
+      'Фонетика: /ау/, /ой/, /ё:/ — уверенно. Хитрые c·g·ph и air·ear·are — хорошо.',
+      'Фонетика: /ау/, /ой/, /ё:/ и хитрые написания — отлично. {name} читает: house, boy, bird, face, phone, chair — без ошибок.'
     ]
   },
   u7: {
@@ -711,11 +711,11 @@ var REPORTS = {
       'Дом — как на ладони. {name} описывает freely: «There\'s a haunted bedroom and there aren\'t any lights!» Possessive pronouns — свободно. Сценарий написал(а) с деталями.'
     ],
     reading:[
-      'Фонетика (JP Book 2): /ou/ (found, brown) и /oi/ (coin, boy) — знакомство.',
-      'Фонетика: /ou/ (ou, ow) — с опорой. /oi/ — знакомство.',
-      'Фонетика: /ou/ — с поддержкой. /oi/ (oi, oy) — осваивает.',
-      'Фонетика: /ou/ — уверенно. /oi/ (coin, boy, toy) — хорошо.',
-      'Фонетика: /ou/ и /oi/ — отлично. {name} читает: found, brown, coin, boy — без ошибок.'
+      'Фонетика (Phonics Hero): большое повторение — диграфы и Magic E. Пока с опорой.',
+      'Фонетика: повторение диграфов (ai·oa·ie, ee·or, ng·oo) — с опорой. Истории читает медленно.',
+      'Фонетика: повторение диграфов и Magic E — с поддержкой. Диктант — справляется.',
+      'Фонетика: диграфы и Magic E — уверенно, диктанты пишет хорошо. Повтор /эй/, /и:/, /ай/ — без ошибок.',
+      'Фонетика: большое повторение пройдено отлично — диктанты без ошибок, истории тетради читает свободно.'
     ]
   },
   u8: {
@@ -727,11 +727,11 @@ var REPORTS = {
       'Город — свободное владение. {name} объясняет маршруты уверенно: «Take the second turning on the right, go past the museum and it\'s on the left.» Одноклассники не заблудились!'
     ],
     reading:[
-      'Фонетика (JP Book 2): /ue/ (blue, few) и soft c/g — знакомство. Читаем мини-тексты.',
-      'Фонетика: /ue/ — с опорой. Soft c (face, cycle) — знакомство. Мини-тексты читает медленно.',
-      'Фонетика: /ue/, soft c, soft g — с поддержкой. Мини-тексты — справляется.',
-      'Фонетика: /ue/, soft c/g, ph — уверенно. Читает мини-тексты самостоятельно.',
-      'Фонетика: /ue/, soft c/g, ph — отлично. {name} читает мини-тексты бегло. Словарный запас для чтения растёт быстро.'
+      'Фонетика (Phonics Hero): повторение написаний гласных (/оу/, /ю:/, /ау/, /ой/, /ё:/…) — пока с опорой.',
+      'Фонетика: повтор /оу/ (coat, snow) и /ю:/ (blue, new) — с опорой. Остальные написания путаются.',
+      'Фонетика: повторение написаний гласных — с поддержкой. Истории Части 1 — справляется.',
+      'Фонетика: все написания гласных (ур.27–31) — уверенно. Хитрые c·g·ph, air·ear·are — хорошо.',
+      'Фонетика: повторение всех написаний — отлично. {name} читает: snow, blue, house, bird, chair — и свободно читает истории Части 1.'
     ]
   },
   u9: {
@@ -743,11 +743,11 @@ var REPORTS = {
       'Блестящее завершение года! {name} рассказывает о прошлом свободно: «I was at the water park with my family. There were lots of people and it was amazing!» Устный экзамен — уверенно, без подсказок.'
     ],
     reading:[
-      'Фонетика (JP Book 2): чтение рассказов и итоговое повторение — в начале пути.',
-      'Фонетика: читает рассказы медленно. Итоговый диктант — с опорой.',
-      'Фонетика: читает короткие рассказы с поддержкой. Диктант — справляется.',
-      'Фонетика: весь JP Book 2 пройден. {name} читает рассказы самостоятельно. К концу года — уверенное чтение.',
-      'Фонетика: JP Book 2 завершён отлично. {name} читает связные тексты свободно. За год — путь от первых звуков до настоящего чтения.'
+      'Фонетика (Phonics Hero): свободное чтение историй тетради и итоговые диктанты — в начале пути.',
+      'Фонетика: истории Частей 2–3 читает медленно. Итоговый диктант — с опорой.',
+      'Фонетика: истории читает с небольшой поддержкой. Диктанты (звуки, диграфы, Magic E) — справляется.',
+      'Фонетика: свободное чтение историй всех частей — уверенно. Финальное чтение на скорость — хорошо. Диплом Фоникс-героя получен!',
+      'Фонетика: вся тетрадь Phonics Hero завершена отлично — свободное чтение, диктанты, Диплом Фоникс-героя. За год — путь от первых звуков до настоящего чтения.'
     ]
   }
 };
