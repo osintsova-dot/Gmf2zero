@@ -251,7 +251,8 @@ textarea { resize: vertical; min-height: 56px; }
     <span class="lbl">Блок</span>
     <div class="pills" id="unitPills">
       <button class="pill on"  onclick="selUnit(0,this,'one')">Genki</button>
-      <button class="pill"     onclick="selUnit(1,this,'one')">Unit 1</button>
+      <button class="pill"     onclick="selUnit(10,this,'one')">Starter</button>
+      <button class="pill"       onclick="selUnit(1,this,'one')">Unit 1</button>
       <button class="pill"     onclick="selUnit(2,this,'one')">Unit 2</button>
       <button class="pill"     onclick="selUnit(3,this,'one')">Unit 3</button>
       <button class="pill"     onclick="selUnit(4,this,'one')">Unit 4</button>
@@ -409,7 +410,8 @@ textarea { resize: vertical; min-height: 56px; }
       <span class="lbl">Блок</span>
       <div class="pills" id="gUnitPills">
         <button class="pill on" onclick="selUnit(0,this,'group')">Genki</button>
-        <button class="pill"   onclick="selUnit(1,this,'group')">Unit 1</button>
+        <button class="pill"   onclick="selUnit(10,this,'group')">Starter</button>
+      <button class="pill"     onclick="selUnit(1,this,'group')">Unit 1</button>
         <button class="pill"   onclick="selUnit(2,this,'group')">Unit 2</button>
         <button class="pill"   onclick="selUnit(3,this,'group')">Unit 3</button>
         <button class="pill"   onclick="selUnit(4,this,'group')">Unit 4</button>
@@ -459,6 +461,7 @@ textarea { resize: vertical; min-height: 56px; }
 
 <script>
 // ── Данные блоков ──────────────────────────────────────────
+var ORDER = [0,10,1,2,3,4,5,6,7,8,9];   // порядок показа: Starter идёт вторым, индексы в localStorage не сдвигаем
 var BLOCKS = [
   { key:'genki',    label:'Genki English',                    period:'Сентябрь–Октябрь', att:12, isGenki:true,  hasTest:false,
     v:'команды, приветствия, эмоции, числа 1–12, цвета, животные, овощи', g:'What\'s your name? / My name is… / I\'m happy. / I can fly! / I like…' },
@@ -479,7 +482,9 @@ var BLOCKS = [
   { key:'u8',       label:'Unit 8 · All around the town — Наш город',     period:'Апрель',            att:6,  isGenki:false, hasTest:true,
     v:'места в городе (bank, museum, train station, car park…)', g:'Is there a…? / Are there any…?' },
   { key:'u9',       label:'Unit 9 · Holiday fun — Каникулы и развлечения',             period:'Апрель–Май',        att:9,  isGenki:false, hasTest:true,
-    v:'места отдыха',             g:'Where were you? / I was… / was/were' }
+    v:'места отдыха',             g:'Where were you? / I was… / was/were' },
+  { key:'starter',  label:'Starter · Let\'s go back to school! — Снова в школу', period:'Октябрь', att:3, isGenki:false, hasTest:false,
+    v:'повторение Level 1 (животные, игрушки, школьные предметы, одежда, еда, числа 1–20), школьные предметы, алфавит a–z', g:'What\'s his/her name? — His/Her name is (Jake). / What\'s your favourite subject? — My favourite subject is (English).' }
 ];
 // att:9 = Unit 9(6) + Final(1) + Speaking(1) + Резерв(1). Итого: 12+9+6*8+9 = 72 ✓
 
@@ -1090,7 +1095,8 @@ function showYearReport(name){
   var totalAtt=0,totalHw=0,hwCount=0;
   var testPcts=[],vArr=[],gArr=[],aArr=[];
   var completed=0;
-  BLOCKS.forEach(function(b,bi){
+  ORDER.forEach(function(bi){
+    var b=BLOCKS[bi];
     var key=makeKey(currentTeacher,name,bi);
     var d=JSON.parse(localStorage.getItem(key)||'null');
     if(d){
